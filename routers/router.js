@@ -11,9 +11,14 @@ let router = Router();
 
 // La creacion de las rutas similares a como se hizo en Java en los controladores
 // Si le llega una peticion get, haga:
-router.get('/', (req, res) => {
-    //res.send('Hola mundo!');
-    postController.welcome( req, res );
-});
+// router.get('/', (req, res) => {
+//     //res.send('Hola mundo!');
+//     postController.welcome( req, res );
+// });
+
+// Simplifica el proceso anterior
+router.get('/welcome', postController.welcome );
+
+router.post('/post/save', postController.savePost );
 
 module.exports = router;

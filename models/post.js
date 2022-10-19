@@ -1,13 +1,13 @@
 //Importa
 const mongoose = require('mongoose');
 //Declarado esquema
-let Schema = mongose.Schema;
+let Schema = mongoose.Schema;
 
 // Esquema/Estructura que permite 
 const postSchema = Schema ({
-    title: String,
-    content: String,
-    user: String,
+    title: { type: String, requied: true },
+    content: { type: String, requied: true },
+    user: { type: String, requied: true },
     created: { type: Date, default: Date.now }
 });
 

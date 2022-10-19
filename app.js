@@ -10,8 +10,7 @@ let app = express();
 // Add middleware
 app.use( express.json() );
 app.use( express.urlencoded( { extended: true}) );
-// Invoca
-app.use( router );
+
 
 // Config, what types of header allow
 app.use( ( req, res, next ) => {
@@ -21,6 +20,9 @@ app.use( ( req, res, next ) => {
     res.header('Allow', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
     next();
 });
+
+// La invocacion debe ser despues de la configuracion o si no no se envia los Header
+app.use( router );
 
 // Application export
 module.exports = app;

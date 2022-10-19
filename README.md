@@ -10,3 +10,6 @@ Definicion Carpetas:
 
 Lo que se hacia en Java en el service en el dao van a ir al controlador en NodeJS-Express  
 
+
+React hace la solicitud como lo hace postman
+  
