@@ -1,6 +1,6 @@
 # Express-U21
-Definicion Carpetas:
-routes/ 
+Definicion Carpetas:  
+routes/  
     Se especifica que se va hacer cuando se consulta una ruta de la pagigna: ejem pagina.com/usarios -> usuarios.js
     Se encarga de decidir para que pagina va 
     La mejor practiva es crear un archivo por cada ruta:
