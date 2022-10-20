@@ -13,3 +13,5 @@ Lo que se hacia en Java en el service en el dao van a ir al controlador en NodeJ
 
 React hace la solicitud como lo hace postman
   
+Mongoose libreria para trabajar con express y mongodb  
+  
