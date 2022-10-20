@@ -1,6 +1,6 @@
 //Application inport
-let app = require ('./app');
-let connection = require('./db/connection');
+let app = require ('./src/app');
+let connection = require('./src/db/connection');
 
 const PORT = 4000;
 

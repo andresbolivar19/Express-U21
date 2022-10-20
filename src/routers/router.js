@@ -21,4 +21,14 @@ router.get('/welcome', postController.welcome );
 
 router.post('/post/save', postController.savePost );
 
+// Busca según un query que se configure
+// El signo "?" es para que sea opcional
+//router.post('/post/list/:search?', postController.listPosts );
+router.get('/post/list/:search?', postController.listPosts );
+
+router.get('/post/:id', postController.findPost );
+router.put('/post/:id', postController.updatePost );
+router.delete('/post/:id', postController.deletePost );
+
 module.exports = router;
+

@@ -1,5 +1,4 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 // Llama el archivo ./routers/router.js
 const router = require('./routers/router');
 
