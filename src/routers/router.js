@@ -5,7 +5,8 @@
 const { Router } = require('express');
 // const { welcome } = require('../controllers/postController');
 const postController = require('../controllers/postController');
-
+const swaggerUI = require('swagger-ui-express')
+const swaggerDocs = require('./swagger.json')
 
 let router = Router();
 
@@ -29,6 +30,9 @@ router.get('/post/list/:search?', postController.listPosts );
 router.get('/post/:id', postController.findPost );
 router.put('/post/:id', postController.updatePost );
 router.delete('/post/:id', postController.deletePost );
+
+router.use('/api-docs', swaggerUI.serve);
+router.get('/api-docs', swaggerUI.setup(swaggerDocs));
 
 module.exports = router;
 
