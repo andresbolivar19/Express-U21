@@ -45,8 +45,6 @@ function verifyToken (req, res, next ) {
                     next();
                 }
         });
-
-        next();
     }else{
         //2 formas de enviar el estado 403
         res.sendStatus(403);

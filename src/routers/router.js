@@ -23,7 +23,7 @@ let router = Router();
 // Simplifica el proceso anterior
 router.get('/welcome', postController.welcome );
 
-router.post('/post/save', postController.savePost );
+router.post('/post/save', authController.verifyToken, postController.savePost );
 
 // Busca según un query que se configure
 // El signo "?" es para que sea opcional

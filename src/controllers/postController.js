@@ -4,7 +4,6 @@ let Post = require('../models/post');
 const { search } = require('../routers/router');
 
 function welcome( req, res ){
-
     res.status(200).send(
         {
             message: 'Welcome!!'
@@ -12,7 +11,10 @@ function welcome( req, res ){
 }
 
 function savePost(req, res){
+
     let myPost = new Post( req.body );
+    //console.log('DATA req.data.username:>> ', req.data.username);
+    myPost.user = req.data.username;
 
     myPost.save( (err, result) => {
         if(err){
@@ -20,11 +22,8 @@ function savePost(req, res){
         }else{
             res.status(200).send({ message: result });
         }
-
     });
-
 }
-
 
 function listPosts(req, res){
 
@@ -122,5 +121,4 @@ module.exports = {
     findPost,
     updatePost, 
     deletePost
-
 };
