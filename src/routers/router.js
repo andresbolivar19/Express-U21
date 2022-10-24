@@ -8,6 +8,9 @@ const postController = require('../controllers/postController');
 const swaggerUI = require('swagger-ui-express')
 const swaggerDocs = require('./swagger.json')
 
+const authController = require ('../controllers/authController');
+
+
 let router = Router();
 
 // La creacion de las rutas similares a como se hizo en Java en los controladores
@@ -34,5 +37,9 @@ router.delete('/post/:id', postController.deletePost );
 router.use('/api-docs', swaggerUI.serve);
 router.get('/api-docs', swaggerUI.setup(swaggerDocs));
 
-module.exports = router;
+// Authentication
+router.post('/auth/login', authController.login );
+// Se agrega authController.verifyToken para que verifique token antes de entrar a la ruta
+router.post('/auth/test', authController.verifyToken, authController.test );
 
+module.exports = router;
