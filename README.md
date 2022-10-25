@@ -18,7 +18,8 @@ Mongoose libreria para trabajar con express y mongodb
 Swagger: Para documentar las rutas 
   
   
-JSON Web Tokens
+JSON Web Tokens 
 Para manejo de sesiones 
-Fuente: https://jwt.io/libraries
-npm install jsonwebtoken
+Fuente: https://jwt.io/libraries 
+npm install jsonwebtoken 
+  

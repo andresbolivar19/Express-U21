@@ -1,21 +1,58 @@
 const jwt = require('jsonwebtoken');
+const bcrypt = require("bcrypt");
+const User = require('../models/user');
 
-function login (req, res) {
-    const user = {
-        username: "AFBN",
-        email: "a@gmail.com"
+// Funcion Login sin guardado de usuario
+// function login (req, res) {
+//     const user = {
+//         username: "AFBN",
+//         email: "a@gmail.com"
+//     }
+//     // Al consultar la ruta envia el usuario 
+//     // res.send({
+//     //     loginUser: user
+//     // });
+
+//     // Guarda el objeto user y genera el token 
+//     jwt.sign( user, 'secretKey', (err, token ) => {
+//         res.send({
+//             token: token
+//         });          
+//     } );
+// }
+
+async function login(req, res) {
+
+    const user = await User.findOne({
+        username: req.body.username
+    });
+
+    if( user == null ){
+        res.status(403).send({ error: "Invalid credentials"});    
+        return;
+    }else{
+
+        const validPassword = await bcrypt.compare( req.body.password, user.password);
+        
+        if ( !validPassword ) {
+            res.status(400).json({ error: "Invalid Password" });
+            return;
+        }
+
+        let token = await new Promise( (resolve, reject) => {
+        
+            jwt.sign(user.toJSON(), 'secretKey', { expiresIn: '600s' }, (err, token) => {
+                if (err){
+                    reject(err);
+                } else{
+                    resolve(token);
+                }
+            });
+        });
+        
+        res.status(200).send({ token:token });    
+        return;
     }
-    // Al consultar la ruta envia el usuario 
-    // res.send({
-    //     loginUser: user
-    // });
-
-    // Guarda el objeto user y genera el token 
-    jwt.sign( user, 'secretKey', (err, token ) => {
-        res.send({
-            token: token
-        });          
-    } );
 }
 
 function test (req, res ) {
@@ -39,7 +76,7 @@ function verifyToken (req, res, next ) {
 
             if ( err ){
                 // Si no es el token esperado, genera error de no autorizado
-                res.sendStatus(403);
+                res.status(403).send({error: "Token not valid"});
                 }else{
                     req.data = data;
                     next();
@@ -47,7 +84,7 @@ function verifyToken (req, res, next ) {
         });
     }else{
         //2 formas de enviar el estado 403
-        res.sendStatus(403);
+        res.status(403).send({error: "Token missing"});
         //res.status(403).send();
     }
 }
