@@ -6,9 +6,9 @@ let Schema = mongoose.Schema;
 // Esquema/Estructura que permite 
 const postSchema = Schema (
     {
-        username: { type: String, requied: true },
-        password: { type: String, requied: true },
-        role: { type: String, requied: true }
+        name: { type: String, required: true },
+        email: { type: String, required: true },
+        password: { type: String, required: true }
     },
     {
         // Create rows createAt and updateAt

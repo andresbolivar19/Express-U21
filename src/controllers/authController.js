@@ -24,7 +24,7 @@ const User = require('../models/user');
 async function login(req, res) {
 
     const user = await User.findOne({
-        username: req.body.username
+        username: req.body.email
     });
 
     if( user == null ){
