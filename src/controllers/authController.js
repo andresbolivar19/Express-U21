@@ -24,18 +24,18 @@ const User = require('../models/user');
 async function login(req, res) {
 
     const user = await User.findOne({
-        username: req.body.email
+        email: req.body.email
     });
 
     if( user == null ){
-        res.status(403).send({ error: "Invalid credentials"});    
+        res.status(403).send({ message: "Invalid credentials"});    
         return;
     }else{
 
         const validPassword = await bcrypt.compare( req.body.password, user.password);
         
         if ( !validPassword ) {
-            res.status(400).json({ error: "Invalid Password" });
+            res.status(403).send({ message: "Invalid password" });
             return;
         }
 
@@ -50,14 +50,14 @@ async function login(req, res) {
             });
         });
         
-        res.status(200).send({ token:token });    
+        res.status(200).send({ message:"Authentication successful", token: token });    
         return;
     }
 }
 
 function test (req, res ) {
     //res.send({ message: req.data });
-    res.status(200).send({ testResult: req.data });
+    res.status(200).send({ data: req.data });
 }
 
 // Function called before acces the route
