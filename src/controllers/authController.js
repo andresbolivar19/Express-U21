@@ -41,7 +41,7 @@ async function login(req, res) {
 
         let token = await new Promise( (resolve, reject) => {
         
-            jwt.sign(user.toJSON(), 'secretKey', { expiresIn: '600s' }, (err, token) => {
+            jwt.sign(user.toJSON(), 'secretKey', { expiresIn: '900s' }, (err, token) => {
                 if (err){
                     reject(err);
                 } else{

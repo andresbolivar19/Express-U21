@@ -30,10 +30,9 @@ router.post('/post/save', authController.verifyToken, postController.savePost );
 // El signo "?" es para que sea opcional
 //router.post('/post/list/:search?', postController.listPosts );
 router.get('/post/list/:search?', postController.listPosts );
-
 router.get('/post/:id', postController.findPost );
-router.put('/post/:id', postController.updatePost );
-router.delete('/post/:id', postController.deletePost );
+router.put('/post/:id', authController.verifyToken, postController.updatePost );
+router.delete('/post/:id', authController.verifyToken, postController.deletePost );
 
 router.use('/api-docs', swaggerUI.serve);
 router.get('/api-docs', swaggerUI.setup(swaggerDocs));
@@ -44,7 +43,8 @@ router.post('/auth/login', authController.login );
 router.post('/auth/verify', authController.verifyToken, authController.test );
 
 // Users
+router.get('/user/list/:search?', userController.listUsers );
 router.post('/user/save', userController.saveUser );
-
+router.delete('/user/:id', authController.verifyToken, userController.deleteUser );
 
 module.exports = router;

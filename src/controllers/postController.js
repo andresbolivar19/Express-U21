@@ -14,7 +14,7 @@ function savePost(req, res){
 
     let myPost = new Post( req.body );
     //console.log('DATA req.data.username:>> ', req.data.username);
-    myPost.user = req.data.username;
+    myPost.email = req.data.email;
 
     myPost.save( (err, result) => {
         if(err){
@@ -54,13 +54,16 @@ function listPosts(req, res){
         };
     }
 
-    let query = Post.find( param ).sort('content');
+    let query = Post.find( param ).sort('createdAt');
 
     query.exec( (err, result) => {
         if(err){
             res.status(500).send({ message: err});
         }else{
-            res.status(200).send({ result });
+            // "( result )" envia el resultado como un Array (Forma mas facil)
+            // "( {result} )" envia el resultado como un objeto, se hace el llamado "reponse.result" para convertirlo a Array
+            // "( {data: result} )" envia el resultado como un objeto, se hace el llamado "reponse.data" para convertirlo a Array
+            res.status(200).send( result );
         }
     });
 }
@@ -81,12 +84,12 @@ function findPost(req, res){
     });
 }
 
-
 function updatePost(req, res){
 
     // Captura lo que se ingresa en la ruta
     let id = req.params.id;
     let data = req.body;
+    req.body.email = req.data.email;
 
     Post.findByIdAndUpdate( id, data, {new: true}, (err, result) =>{
 
@@ -108,17 +111,10 @@ function deletePost(req, res){
         if(err){
             res.status(500).send({ message: err});
         }else{
-            res.status(200).send({ result });
+            res.status(200).send({ message: "Post deleted", "result": result });
         }
     });
 }
 
 // Se exportan para que se pueden consultar desde el router.js
-module.exports = { 
-    welcome,
-    savePost,
-    listPosts,
-    findPost,
-    updatePost, 
-    deletePost
-};
+module.exports = { welcome, savePost, listPosts, findPost, updatePost, deletePost };
