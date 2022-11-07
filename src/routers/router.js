@@ -41,7 +41,7 @@ router.get('/api-docs', swaggerUI.setup(swaggerDocs));
 // Authentication
 router.post('/auth/login', authController.login );
 // Se agrega authController.verifyToken para que verifique token antes de entrar a la ruta
-router.post('/auth/test', authController.verifyToken, authController.test );
+router.post('/auth/verify', authController.verifyToken, authController.test );
 
 // Users
 router.post('/user/save', userController.saveUser );
