@@ -1,6 +1,6 @@
 // Ejemplo para publicar un blog
 const { default: mongoose } = require('mongoose');
-let Post = require('../models/post');
+let Pet = require('../models/pet');
 const { search } = require('../routers/router');
 
 function welcome( req, res ){
@@ -10,13 +10,13 @@ function welcome( req, res ){
         });
 }
 
-function savePost(req, res){
+function savePet(req, res){
 
-    let myPost = new Post( req.body );
+    let myPet = new Pet( req.body );
     //console.log('DATA req.data.username:>> ', req.data.username);
-    myPost.email = req.data.email;
+    myPet.email = req.data.email;
 
-    myPost.save( (err, result) => {
+    myPet.save( (err, result) => {
         if(err){
             res.status(500).send({ message: err});
         }else{
@@ -25,14 +25,14 @@ function savePost(req, res){
     });
 }
 
-function listPosts(req, res){
+function listPets(req, res){
 
     // let query;
     // Valida si llega uno parametro para buscar por el, o buscar todo
     // if (search ) {
-    //     query = Post.findById({ title: search}).sort('content');
+    //     query = Pet.findById({ title: search}).sort('content');
     // }else{
-    //     query = Post.findById({}).sort('content');
+    //     query = Pet.findById({}).sort('content');
     // }
 
     // Captura lo que se ingresa en la ruta
@@ -48,13 +48,15 @@ function listPosts(req, res){
     if ( search ) {
         param = { 
             $or: [
-                {title: { $regex: search, $options: "i" } },
-                {content: { $regex: search, $options: "i" } },
+                {category: { $regex: search, $options: "i" } },
+                {name: { $regex: search, $options: "i" } },
+                {status: { $regex: search, $options: "i" } },
+                {user: { $regex: search, $options: "i" } },
             ] 
         };
     }
 
-    let query = Post.find( param ).sort('createdAt');
+    let query = Pet.find( param ).sort('createdAt');
 
     query.exec( (err, result) => {
         if(err){
@@ -68,12 +70,12 @@ function listPosts(req, res){
     });
 }
 
-function findPost(req, res){
+function findPet(req, res){
 
     // Captura lo que se ingresa en la ruta
     let id = req.params.id;
 
-    let query = Post.findById({id}).sort('createdAt');
+    let query = Pet.findById({id}).sort('createdAt');
 
     query.exec( (err, result) => {
         if(err){
@@ -84,14 +86,14 @@ function findPost(req, res){
     });
 }
 
-function updatePost(req, res){
+function updatePet(req, res){
 
     // Captura lo que se ingresa en la ruta
     let id = req.params.id;
     let data = req.body;
     req.body.email = req.data.email;
 
-    Post.findByIdAndUpdate( id, data, {new: true}, (err, result) =>{
+    Pet.findByIdAndUpdate( id, data, {new: true}, (err, result) =>{
 
         if(err){
             res.status(500).send({ message: err});
@@ -101,20 +103,20 @@ function updatePost(req, res){
     });
 }
 
-function deletePost(req, res){
+function deletePet(req, res){
 
     // Captura lo que se ingresa en la ruta
     let id = req.params.id;
 
-    Post.findByIdAndDelete( id, (err, result) =>{
+    Pet.findByIdAndDelete( id, (err, result) =>{
 
         if(err){
             res.status(500).send({ message: err});
         }else{
-            res.status(200).send({ message: "Post deleted", "result": result });
+            res.status(200).send({ message: "Pet deleted", "result": result });
         }
     });
 }
 
 // Se exportan para que se pueden consultar desde el router.js
-module.exports = { welcome, savePost, listPosts, findPost, updatePost, deletePost };
+module.exports = { welcome, savePet, listPets, findPet, updatePet, deletePet };

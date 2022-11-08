@@ -10,7 +10,7 @@ const swaggerDocs = require('./swagger.json')
 
 const authController = require ('../controllers/authController');
 const userController = require ('../controllers/userController');
-
+const petController = require('../controllers/petController');
 
 let router = Router();
 
@@ -46,5 +46,12 @@ router.post('/auth/verify', authController.verifyToken, authController.test );
 router.get('/user/list/:search?', userController.listUsers );
 router.post('/user/save', userController.saveUser );
 router.delete('/user/:id', authController.verifyToken, userController.deleteUser );
+
+// Pets
+router.post('/pet/save', authController.verifyToken, petController.savePet );
+router.get('/pet/list/:search?', petController.listPets );
+router.get('/pet/:id', petController.findPet );
+router.put('/pet/:id', authController.verifyToken, petController.updatePet );
+router.delete('/pet/:id', authController.verifyToken, petController.deletePet );
 
 module.exports = router;
