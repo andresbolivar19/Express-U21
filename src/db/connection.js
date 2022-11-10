@@ -10,7 +10,7 @@ const mongoose = require('mongoose');
 // });
 
 // Server conection
-mongoose.connect("mongodb+srv://${{secrets.BD_USER}}:${{secrets.BD_PASS}}@cluster0.0ousshc.mongodb.net/mintic?retryWrites=true&w=majority", { }, (err, res) => {
+mongoose.connect("mongodb+srv://root:root.root@cluster0.0ousshc.mongodb.net/mintic?retryWrites=true&w=majority", { }, (err, res) => {
     if(err){
         console.log("Error connecting to database");
     }else{
