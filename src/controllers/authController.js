@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
-const bcrypt = require("bcrypt");
 const User = require('../models/user');
+const bcrypt = require("bcrypt");
+
 
 // Funcion Login sin guardado de usuario
 // function login (req, res) {
@@ -27,21 +28,21 @@ async function login(req, res) {
         email: req.body.email
     });
 
-    if( user == null ){
+    if ( user == null ){
         res.status(403).send({ message: "Invalid credentials"});    
         return;
     }else{
 
-        const validPassword = await bcrypt.compare( req.body.password, user.password);
+        const validPassword = await bcrypt.compare( req.body.password, user.password );
         
-        if ( !validPassword ) {
-            res.status(403).send({ message: "Invalid password" });
+        if( !validPassword ){
+            res.status(403).send({ message: "Invalid password"});
             return;
-        }
+        }else{
 
-        let token = await new Promise( (resolve, reject) => {
+        let token = await new Promise((resolve, reject) => {
         
-            jwt.sign(user.toJSON(), 'secretKey', { expiresIn: '900s' }, (err, token) => {
+            jwt.sign( user.toJSON(), 'secretKey',{ expiresIn: '3600s'} ,(err, token) => {
                 if (err){
                     reject(err);
                 } else{
@@ -54,39 +55,48 @@ async function login(req, res) {
         return;
     }
 }
+}
 
-function test (req, res ) {
-    //res.send({ message: req.data });
-    res.status(200).send({ data: req.data });
+function profile(req, res) {
+
+    res.status(200).send({
+        message: req.payload
+    });
+
 }
 
 // Function called before acces the route
 // next: to continue with proccess
-function verifyToken (req, res, next ) {
+function verifyToken(req, res, next) {
     // Verifica en los headers el valor que tiene en authorization
     const requestHeader = req.headers['authorization'];
 
     // Valida si se envio o no el header authorization
-    if (typeof requestHeader !== 'undefined'){
+    if (typeof requestHeader !== 'undefined') {
         // funcion split separa un texto segun el separador que se ponga, en este caso espacio
         const token = requestHeader.split(" ")[1];
 
         // Validacion del token, el usuario se guarda arriba en jwt.sign( user,
-        jwt.verify( token, 'secretKey', (err, data ) => {
+        jwt.verify(token, 'secretKey', (err, payload) => {
 
-            if ( err ){
+            if (err) {
                 // Si no es el token esperado, genera error de no autorizado
-                res.status(403).send({error: "Token not valid"});
-                }else{
-                    req.data = data;
-                    next();
-                }
+                res.status(403).send({
+                    error: "Token not valid"
+                });
+            } else {
+                req.payload = payload;
+                next();
+            }
         });
-    }else{
+
+    } else {
         //2 formas de enviar el estado 403
-        res.status(403).send({error: "Token missing"});
+        res.status(403).send({
+            error: "Token missing"
+        });
         //res.status(403).send();
     }
 }
 
-module.exports = { login, test, verifyToken };
+module.exports = { login, profile, verifyToken };

@@ -1,26 +1,23 @@
-// Ejemplo para publicar un blog
-const { default: mongoose } = require('mongoose');
 let Pet = require('../models/pet');
-const { search } = require('../routers/router');
 
-function welcome( req, res ){
-    res.status(200).send(
-        {
-            message: 'Welcome!!'
-        });
-}
+// function welcome( req, res ){
+//     res.status(200).send(
+//         {
+//             message: 'Welcome!!'
+//         });
+// }
 
-function savePet(req, res){
+function savePet( req, res ){
 
     let myPet = new Pet( req.body );
     //console.log('DATA req.data.username:>> ', req.data.username);
-    myPet.email = req.data.email;
+    myPet.user = req.payload.email;
 
     myPet.save( (err, result) => {
         if(err){
-            res.status(500).send({ message: err});
+            res.status(500).send({ error: err});
         }else{
-            res.status(200).send({ message: result });
+            res.status(200).send({ message: "Pet created", result: result });
         }
     });
 }
@@ -37,7 +34,7 @@ function listPets(req, res){
 
     // Captura lo que se ingresa en la ruta
     let search = req.params.search;
-    let param = {};
+    let queryParam = {};
     
     // Busca solo por un campo
     // if ( search ) {
@@ -46,17 +43,16 @@ function listPets(req, res){
 
     // Busca el contenido en varios campos
     if ( search ) {
-        param = { 
+        queryParam = { 
             $or: [
-                {category: { $regex: search, $options: "i" } },
-                {name: { $regex: search, $options: "i" } },
-                {status: { $regex: search, $options: "i" } },
-                {user: { $regex: search, $options: "i" } },
+                { title: { $regex: search, $options: "i" } },
+                { content: { $regex: search, $options: "i" } },
+                { user: { $regex: search, $options: "i"  } }
             ] 
         };
     }
 
-    let query = Pet.find( param ).sort('createdAt');
+    query = Pet.find( queryParam ).sort('createdAt');
 
     query.exec( (err, result) => {
         if(err){
@@ -74,14 +70,13 @@ function findPet(req, res){
 
     // Captura lo que se ingresa en la ruta
     let id = req.params.id;
-
-    let query = Pet.findById({id}).sort('createdAt');
+    let query = Pet.findById(id);
 
     query.exec( (err, result) => {
         if(err){
             res.status(500).send({ message: err});
         }else{
-            res.status(200).send({ result });
+            res.status(200).send( result );
         }
     });
 }
@@ -91,14 +86,14 @@ function updatePet(req, res){
     // Captura lo que se ingresa en la ruta
     let id = req.params.id;
     let data = req.body;
-    req.body.email = req.data.email;
+    data.user = req.payload.email;
 
     Pet.findByIdAndUpdate( id, data, {new: true}, (err, result) =>{
 
         if(err){
             res.status(500).send({ message: err});
         }else{
-            res.status(200).send({ result });
+            res.status(200).send( { message: "Pet updated", result: result });
         }
     });
 }
@@ -113,10 +108,10 @@ function deletePet(req, res){
         if(err){
             res.status(500).send({ message: err});
         }else{
-            res.status(200).send({ message: "Pet deleted", "result": result });
+            res.status(200).send( { message: "Pet deleted", result: result } );
         }
     });
 }
 
 // Se exportan para que se pueden consultar desde el router.js
-module.exports = { welcome, savePet, listPets, findPet, updatePet, deletePet };
+module.exports = { savePet, listPets, findPet, updatePet, deletePet };

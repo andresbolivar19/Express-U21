@@ -7,6 +7,7 @@ let Schema = mongoose.Schema;
 const postSchema = Schema ({
     title: { type: String, requied: true },
     content: { type: String, requied: true },
+    status: { type: String, enum:['Published', 'On review', 'Draft'], requied: true },
     user: { type: String, requied: true }
     },
     {
@@ -18,6 +19,6 @@ const postSchema = Schema ({
 // 1er atributo, nombre que tiene en la base de datos
 // 2do atributo, nombre del equema que dice la estructira de este modelo
 // Table.Schema
-const Post = mongoose.model('post', postSchema);
+const Post = mongoose.model('posts', postSchema);
 
 module.exports = Post;

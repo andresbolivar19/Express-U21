@@ -1,26 +1,23 @@
-// Ejemplo para publicar un blog
-const { default: mongoose } = require('mongoose');
 let Post = require('../models/post');
-const { search } = require('../routers/router');
 
-function welcome( req, res ){
-    res.status(200).send(
-        {
-            message: 'Welcome!!'
-        });
-}
+// function welcome( req, res ){
+//     res.status(200).send(
+//         {
+//             message: 'Welcome!!'
+//         });
+// }
 
-function savePost(req, res){
+function savePost( req, res ){
 
     let myPost = new Post( req.body );
     //console.log('DATA req.data.username:>> ', req.data.username);
-    myPost.email = req.data.email;
+    myPost.user = req.payload.email;
 
     myPost.save( (err, result) => {
         if(err){
-            res.status(500).send({ message: err});
+            res.status(500).send({ error: err});
         }else{
-            res.status(200).send({ message: result });
+            res.status(200).send({ message: "Post created", result: result });
         }
     });
 }
@@ -37,7 +34,7 @@ function listPosts(req, res){
 
     // Captura lo que se ingresa en la ruta
     let search = req.params.search;
-    let param = {};
+    let queryParam = {};
     
     // Busca solo por un campo
     // if ( search ) {
@@ -46,15 +43,16 @@ function listPosts(req, res){
 
     // Busca el contenido en varios campos
     if ( search ) {
-        param = { 
+        queryParam = { 
             $or: [
-                {title: { $regex: search, $options: "i" } },
-                {content: { $regex: search, $options: "i" } },
+                { title: { $regex: search, $options: "i" } },
+                { content: { $regex: search, $options: "i" } },
+                { user: { $regex: search, $options: "i"  } }
             ] 
         };
     }
 
-    let query = Post.find( param ).sort('createdAt');
+    query = Post.find( queryParam ).sort('createdAt');
 
     query.exec( (err, result) => {
         if(err){
@@ -72,14 +70,13 @@ function findPost(req, res){
 
     // Captura lo que se ingresa en la ruta
     let id = req.params.id;
-
-    let query = Post.findById({id}).sort('createdAt');
+    let query = Post.findById(id);
 
     query.exec( (err, result) => {
         if(err){
             res.status(500).send({ message: err});
         }else{
-            res.status(200).send({ result });
+            res.status(200).send( result );
         }
     });
 }
@@ -89,14 +86,14 @@ function updatePost(req, res){
     // Captura lo que se ingresa en la ruta
     let id = req.params.id;
     let data = req.body;
-    req.body.email = req.data.email;
+    data.user = req.payload.email;
 
     Post.findByIdAndUpdate( id, data, {new: true}, (err, result) =>{
 
         if(err){
             res.status(500).send({ message: err});
         }else{
-            res.status(200).send({ result });
+            res.status(200).send( { message: "Post updated", result: result });
         }
     });
 }
@@ -111,10 +108,10 @@ function deletePost(req, res){
         if(err){
             res.status(500).send({ message: err});
         }else{
-            res.status(200).send({ message: "Post deleted", "result": result });
+            res.status(200).send( { message: "Post deleted", result: result } );
         }
     });
 }
 
 // Se exportan para que se pueden consultar desde el router.js
-module.exports = { welcome, savePost, listPosts, findPost, updatePost, deletePost };
+module.exports = { savePost, listPosts, findPost, updatePost, deletePost };
