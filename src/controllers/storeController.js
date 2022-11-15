@@ -1,4 +1,4 @@
-let Pet = require('../models/pet');
+let Store = require('../models/store');
 
 // function welcome( req, res ){
 //     res.status(200).send(
@@ -7,29 +7,29 @@ let Pet = require('../models/pet');
 //         });
 // }
 
-function savePet( req, res ){
+function saveStore( req, res ){
 
-    let myPet = new Pet( req.body );
+    let myStore = new Store( req.body );
     //console.log('DATA req.data.username:>> ', req.data.username);
-    myPet.user = req.payload.email;
+    myStore.user = req.payload.email;
 
-    myPet.save( (err, result) => {
+    myStore.save( (err, result) => {
         if(err){
             res.status(500).send({ error: err});
         }else{
-            res.status(200).send({ message: "Pet created", result: result });
+            res.status(200).send({ message: "Store created", result: result });
         }
     });
 }
 
-function listPets(req, res){
+function listStores(req, res){
 
     // let query;
     // Valida si llega uno parametro para buscar por el, o buscar todo
     // if (search ) {
-    //     query = Pet.findById({ title: search}).sort('content');
+    //     query = Store.findById({ title: search}).sort('content');
     // }else{
-    //     query = Pet.findById({}).sort('content');
+    //     query = Store.findById({}).sort('content');
     // }
 
     // Captura lo que se ingresa en la ruta
@@ -45,18 +45,14 @@ function listPets(req, res){
     if ( search ) {
         queryParam = { 
             $or: [
-                { idPet: { $regex: search, $options: "i" } },
-                { name: { $regex: search, $options: "i" } },
-                { category: { $regex: search, $options: "i" } },
-                { photoUrls: { $regex: search, $options: "i" } },
-                { price: { $regex: search, $options: "i" } },
-                { status: { $regex: search, $options: "i" } },
+                { title: { $regex: search, $options: "i" } },
+                { content: { $regex: search, $options: "i" } },
                 { user: { $regex: search, $options: "i"  } }
             ] 
         };
     }
 
-    query = Pet.find( queryParam ).sort('createdAt');
+    query = Store.find( queryParam ).sort('createdAt');
 
     query.exec( (err, result) => {
         if(err){
@@ -70,11 +66,11 @@ function listPets(req, res){
     });
 }
 
-function findPet(req, res){
+function findStore(req, res){
 
     // Captura lo que se ingresa en la ruta
     let id = req.params.id;
-    let query = Pet.findById(id);
+    let query = Store.findById(id);
 
     query.exec( (err, result) => {
         if(err){
@@ -85,37 +81,37 @@ function findPet(req, res){
     });
 }
 
-function updatePet(req, res){
+function updateStore(req, res){
 
     // Captura lo que se ingresa en la ruta
     let id = req.params.id;
     let data = req.body;
     data.user = req.payload.email;
 
-    Pet.findByIdAndUpdate( id, data, {new: true}, (err, result) =>{
+    Store.findByIdAndUpdate( id, data, {new: true}, (err, result) =>{
 
         if(err){
             res.status(500).send({ message: err});
         }else{
-            res.status(200).send( { message: "Pet updated", result: result });
+            res.status(200).send( { message: "Store updated", result: result });
         }
     });
 }
 
-function deletePet(req, res){
+function deleteStore(req, res){
 
     // Captura lo que se ingresa en la ruta
     let id = req.params.id;
 
-    Pet.findByIdAndDelete( id, (err, result) =>{
+    Store.findByIdAndDelete( id, (err, result) =>{
 
         if(err){
             res.status(500).send({ message: err});
         }else{
-            res.status(200).send( { message: "Pet deleted", result: result } );
+            res.status(200).send( { message: "Store deleted", result: result } );
         }
     });
 }
 
 // Se exportan para que se pueden consultar desde el router.js
-module.exports = { savePet, listPets, findPet, updatePet, deletePet };
+module.exports = { saveStore, listStores, findStore, updateStore, deleteStore };

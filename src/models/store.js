@@ -4,13 +4,12 @@ const mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 
 // Esquema/Estructura que permite 
-const petSchema = Schema ({
+const storeSchema = Schema ({
     idPet: { type: String, requied: true },
-    name: { type: String, requied: true },
-    category: { type: String, enum:['Dogs', 'Cats', 'Others'], requied: true },
-    photoUrls: {type: String},
+    quantity: {type: Number},
+    address: { type: String, requied: true },
     price: {type: Number},
-    status: {type: String},
+    status: {type: String, requied: true },
     user: { type: String, requied: true }
     },
     {
@@ -22,6 +21,6 @@ const petSchema = Schema ({
 // 1er atributo, nombre que tiene en la base de datos
 // 2do atributo, nombre del equema que dice la estructira de este modelo
 // Table.Schema
-const Pet = mongoose.model('pet', petSchema);
+const Store = mongoose.model('store', storeSchema);
 
-module.exports = Pet;
+module.exports = Store;

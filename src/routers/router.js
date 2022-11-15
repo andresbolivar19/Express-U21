@@ -11,6 +11,7 @@ const swaggerDocs = require('./swagger.json')
 const authController = require ('../controllers/authController');
 const userController = require ('../controllers/userController');
 const petController = require('../controllers/petController');
+const storeController = require('../controllers/storeController');
 
 let router = Router();
 
@@ -54,5 +55,12 @@ router.get('/pet/list/:search?', petController.listPets );
 router.get('/pet/:id', petController.findPet );
 router.put('/pet/:id', authController.verifyToken, petController.updatePet );
 router.delete('/pet/:id', authController.verifyToken, petController.deletePet );
+
+// Stores
+router.post('/store/save', authController.verifyToken, storeController.saveStore );
+router.get('/store/list/:search?', storeController.listStores );
+router.get('/store/:id', storeController.findStore );
+router.put('/store/:id', authController.verifyToken, storeController.updateStore );
+router.delete('/store/:id', authController.verifyToken, storeController.deleteStore );
 
 module.exports = router;
